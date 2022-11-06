@@ -28,6 +28,5 @@ const reactionSchema = new Schema(
       }
 ); 
 
-
 // I dont need to initialize this bc it's schema only, correct??
 module.exports = reactionSchema; 
