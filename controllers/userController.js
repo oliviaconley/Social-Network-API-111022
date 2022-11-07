@@ -1,5 +1,4 @@
-const { User, Thoughts } = require('../models');  //add thought if we are removing the associated ones
-
+const { User, Thoughts } = require('../models'); 
 
 module.exports = {
     //get all users
@@ -25,8 +24,7 @@ module.exports = {
         .then((dbUserData) => res.json(dbUserData))
         .catch((err) => res.status(500).json(err));
     },
-    //update user !!!
-    //updating the user by the user id that we're including in url parameter and the user that is attached to it, it will set it in the req. body
+    //updating the user by the user id 
     updateUser(req, res) {
         User.findOneAndUpdate(
             { _id: req.params.userId },
@@ -43,8 +41,7 @@ module.exports = {
             res.status(500).json(err);
           });
     },
-    //delete user by ID AND associated 'thoughts' lol
-    //IS THIS CORRECT THOOOOOOOOOOO
+    //delete user by ID AND associated 'thoughts' 
     deleteUser(req, res) {
         User.findOneAndDelete({ _id: req.params.userId })
             .then((user) =>
@@ -67,7 +64,7 @@ module.exports = {
             !user
               ? res
                   .status(404)
-                  .json({ message: 'No friend found with that ID :(' })
+                  .json({ message: 'No friend found with that ID ' })
               : res.json(user)
           )
           .catch((err) => res.status(500).json(err));
@@ -88,4 +85,3 @@ module.exports = {
           .catch((err) => res.status(500).json(err));
       },
 };
-

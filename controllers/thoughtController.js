@@ -15,12 +15,11 @@ module.exports = {
           )
           .catch((err) => res.status(500).json(err));
       },
-    //create
     createThought(req, res) {
         Thought.create(req.body)
           .then((thought) => {
             return User.findOneAndUpdate(
-              { _id: req.body.userId }, //passing the id from mongo db to the req.body
+              { _id: req.body.userId }, 
               { $addToSet: { thoughts: thought._id } }, //adding to the user array
               { new: true }
             );
@@ -30,14 +29,13 @@ module.exports = {
               ? res.status(404).json({
                   message: 'Thought created, but found no user with that ID',
                 })
-              : res.json('Created the THOT')
+              : res.json('Thought created')
           )
           .catch((err) => {
             console.log(err);
             res.status(500).json(err);
           });
       },
-    //updating the thought by the application id that we're including in url parameter and the user that is attached to it, it will set it in the req. body
     updateThought(req, res) {
         Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
@@ -46,7 +44,7 @@ module.exports = {
         )
          .then((thought) =>
          !thought
-            ? res.status(404).json({ message: 'No thought with this id!' })
+            ? res.status(404).json({ message: 'No thought with this id' })
             : res.json(thought)
         )
         .catch((err) => {
@@ -54,24 +52,53 @@ module.exports = {
             res.status(500).json(err);
         });
      },
-    //delete 
     deleteThought(req, res) {
         Thought.findOneAndRemove({ _id: req.params.thoughtId })
           .then((thought) =>
             !thought
-              ? res.status(404).json({ message: 'No thought with this id!' })
-              : User.findOneAndUpdate( //if it exists it finds the user 
+              ? res.status(404).json({ message: 'No thought with this id' })
+              : User.findOneAndUpdate( 
                   { thoughts: req.params.thoughtId },
-                  { $pull: { applications: req.params.thoughtId } }, //deletes that pp id from the users array 
+                  { $pull: { thoughts: req.params.thoughtId } },
                   { new: true }
                 )
           )
           .then((user) =>
             !user
               ? res.status(404).json({
-                  message: 'Thought created but no user with this id!',
+                  message: 'Thought created but no user with this id',
                 })
-              : res.json({ message: 'Thought successfully deleted!' })
+              : res.json({ message: 'Thought successfully deleted' })
+          )
+          .catch((err) => res.status(500).json(err));
+      },
+      createReaction(req, res) {
+        Thought.findOneAndUpdate(
+          { _id: req.params.thoughtId },
+          { $addToSet: { reactions: req.params.reactionId } },
+          { runValidators: true, new: true }
+        )
+          .then((thought) =>
+            !thought
+              ? res
+                .status(404)
+                .json({ message: 'No thought with this ID' })
+              : res.json(thought)
+          )
+          .catch((err) => res.status(500).json(err));
+      },
+      removeReaction(req, res) {
+        Thought.findOneAndUpdate(
+          { _id: req.params.thoughtId },
+          { $pull: { reactions: { reactionId: req.params.reactionId } } },
+          { runValidators: true, new: true }
+        )
+          .then((thought) =>
+            !thought
+              ? res
+                .status(404)
+                .json({ message: 'No thought with this id' })
+              : res.json(thought)
           )
           .catch((err) => res.status(500).json(err));
       },
