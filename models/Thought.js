@@ -1,4 +1,6 @@
 const { Schema, model } = require("mongoose");
+const reactionSchema = require('./Reaction'); 
+
 
 const thoughtSchema = new Schema(
     {
@@ -16,7 +18,6 @@ const thoughtSchema = new Schema(
             type: String, 
             required: true
         }, 
-        //array of nested documents ... i think ? 
         reactions: [reactionSchema]
     },
     {
@@ -33,6 +34,6 @@ thoughtSchema
         return this.reactions.length; 
       });
 
-const Thought = model('thought', thoughtSchema); 
+const Thought = model('Thought', thoughtSchema); 
 
 module.exports = Thought; 
