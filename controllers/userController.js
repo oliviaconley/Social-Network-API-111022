@@ -29,7 +29,7 @@ module.exports = {
             )
         .then((user) => 
         !user
-          ? res.status(404).json({ message: 'No user with this id' })
+          ? res.status(404).json({ message: 'No user with this ID' })
           : res.json(user)
         )
         .catch((err) => {
@@ -42,7 +42,7 @@ module.exports = {
             .then((user) =>
             {
             if(!user) {
-              return res.status(404).json({ message: 'no user found with that id'})
+              return res.status(404).json({ message: 'no user found with that ID'})
               
             }
             return Thought.deleteMany({ _id: { $in: user.thoughts } })
